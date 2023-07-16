@@ -23,6 +23,8 @@ const page = () => {
       const response = await axios.post('api/post', formData);
       if(response.status===200){
         alert(`Thank you for submitting the form!`);
+        setRegistrationSuccess(true);
+        setSuccessMessage(`Thank you for submitting the form!`)
         handleReset();
       }
     } catch (error) {
@@ -90,6 +92,8 @@ const page = () => {
   };
 
   const [isChecked, setIsChecked] = useState(false);
+  const [registrationSuccess, setRegistrationSuccess] = useState(false);
+  const [successmessage, setSuccessMessage] = useState("")
 
   const handleRadioButtonChange = (event) => {
     setIsChecked(event.target.checked);
@@ -110,7 +114,7 @@ const page = () => {
                 </div>
                 <hr />
               </div>
-              <div className="bg-white text-black  shadow-lg p-3 px-3 md:p-6 mb-6">
+              { !registrationSuccess ? (<div className="bg-white text-black  shadow-lg p-3 px-3 md:p-6 mb-6">
                 Read / Download Event Rules -
                 <a href="/AtmiyaAvsarRulesEnglish.pdf" style={{ color: "blue" }}> English</a> |
                 <a href="/AtmiyaAvsarRulesGujarati.pdf" style={{ color: "blue" }}> Gujarati</a>
@@ -129,7 +133,8 @@ const page = () => {
                   </label>
                 </div>
                 <hr />
-                {isChecked ? (<div className="grid grid-cols-3 gap-4 mb-2 mt-2">
+                {isChecked ? 
+                (<div className="grid grid-cols-3 gap-4 mb-2 mt-2">
                   <div>
                     <select
                       className="h-10 border mt-1  px-4 w-full bg-white text-black"
@@ -226,12 +231,13 @@ const page = () => {
                       }
                     </select>
                   </div>
-                </div>) : <></>}
+                </div>):(<></>)}
                 <hr className="mt-3 mb-3" />
                 {renderInputRows()}
                 <hr className="mt-3" />
                 {/* Add more students here */}
-                <div className="text-right mt-5">
+                {isChecked ? 
+                (<div className="text-right mt-5">
                   <button
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4  mr-2"
                     onClick={handleSubmit}
@@ -244,8 +250,11 @@ const page = () => {
                   >
                     Reset
                   </button>
+                </div>):(<></>)}
+              </div>):(
+                <div dangerouslySetInnerHTML={{ __html: successmessage }} className="bg-white text-black  shadow-lg p-3 px-3 md:p-6 mb-6 text-red-600 font-bold mb-2">
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
