@@ -21,14 +21,12 @@ const page = () => {
     e.preventDefault();
     try {
       const response = await axios.post('api/post', formData);
-      if(response.status===201){
+      if(response.status===200){
         alert(`Thank you for submitting the form!`);
         handleReset();
       }
     } catch (error) {
       console.error(error);
-      alert(`Thank you for submitting the form!`);
-      handleReset();
     }
   };
   const handleReset = () => {
