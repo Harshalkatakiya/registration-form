@@ -20,9 +20,11 @@ const page = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('api/post', formData);
-      alert(`Thank you for submitting the form!`);
-      handleReset();
+      const response = await axios.post('api/post', formData);
+      if(response.status===201){
+        alert(`Thank you for submitting the form!`);
+        handleReset();
+      }
     } catch (error) {
       console.error(error);
       alert(`Thank you for submitting the form!`);
@@ -116,6 +118,7 @@ const page = () => {
                 <a href="/AtmiyaAvsarRulesGujarati.pdf" style={{ color: "blue" }}> Gujarati</a>
                 <div className="text-sm mb-4 mt-2">
                   <input
+                  id="default-radio-1"
                     type="radio"
                     name="concent"
                     value="yes"
