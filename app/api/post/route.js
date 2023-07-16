@@ -66,7 +66,7 @@ export async function POST(req, res) {
         //console.log(body)
         //const ParticipatesCollectionObj = new ParticipatesCollection(body);
         await ParticipatesCollectionObj.save();
-        return NextResponse.json({ok:true})
+        return NextResponse.json({ok:true, text: `Dear ${body.full_name1},<br>Thank you for registering for the ${body.groupEvent} event. Your registration has been confirmed.<br><strong>Your Registration Number: ${registrationID}</strong>`})
     } catch (err) {
         res.status(400).json({ error: err.message });
     }

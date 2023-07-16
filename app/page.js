@@ -23,8 +23,9 @@ const page = () => {
       const response = await axios.post('api/post', formData);
       if(response.status===200){
         alert(`Thank you for submitting the form!`);
+        //console.log(response)
         setRegistrationSuccess(true);
-        setSuccessMessage(`Thank you for submitting the form!`)
+        setSuccessMessage(response.data.text)
         handleReset();
       }
     } catch (error) {
