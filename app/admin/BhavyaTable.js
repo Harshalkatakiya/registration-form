@@ -15,7 +15,7 @@ export default function BhavyaTable() {
     const [filteredData, setFilteredData] = useState([]);
     const [sortOrder, setSortOrder] = useState(-1);
     const [selectedFilters, setSelectedFilters] = useState({});
-    const [searchValue, setSearchValue] = useState("");
+   // const [searchValue, setSearchValue] = useState("");
 
     useEffect(() => {
         const fetchData = async () => {
@@ -105,7 +105,7 @@ export default function BhavyaTable() {
         setFilteredData(filteredData);
     };
 
-    const handleSearch = () => {
+   /*  const handleSearch = () => {
         const filteredData = data.filter((item) => {
             return Object.entries(selectedFilters).every(([column, filters]) => {
                 return filters.length === 0 || filters.includes(item[column]);
@@ -133,7 +133,7 @@ export default function BhavyaTable() {
             });
             setFilteredData(searchFilteredData);
         }
-    };
+    }; */
 
     const handleColumnToggle = (columnName) => {
         const updatedColumns = columns.map((column) =>
@@ -208,7 +208,7 @@ export default function BhavyaTable() {
                                 ></CheckboxDropdown>
                             </div>
                             <div className="my-3 d-table-cell justify-content-center">
-                                <div className="input-group">
+                               {/*  <div className="input-group">
                                     <span className="input-group-text" id="basic-addon1">
                                         <i className="bi bi-search"></i>
                                     </span>
@@ -230,7 +230,7 @@ export default function BhavyaTable() {
                                     >
                                         Search
                                     </button>
-                                </div>
+                                </div> */}
                             </div>
                             <div className="d-flex justify-content-end my-3">
                                 <button
