@@ -114,7 +114,7 @@ export default function BhavyaTable() {
             });
         });
 
-        const searchInput = document.getElementById("search-input");
+       // const searchInput = document.getElementById("search-input");
 
         if (searchInput.value === "") {
             setFilteredData(filteredData);
