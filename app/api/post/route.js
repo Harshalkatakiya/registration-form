@@ -13,7 +13,7 @@ try {
         sequence_value: { type: Number, default: 1 },
     });
     Counter = mongoose.models.Counter || mongoose.model('Counter', counterSchema);
-    ParticipatesCollection = mongoose.model('participates');
+   // ParticipatesCollection = mongoose.model('participates');
 } catch (error) {
     console.log(error);
 }
