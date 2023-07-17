@@ -8,58 +8,58 @@ import "bootstrap/dist/js/bootstrap.bundle.js";
 import axios from "axios";
 
 export default function BhavyaTable() {
-  const [data, setData] = useState([]);
-  const [isDataFetched, setIsDataFetched] = useState(false);
-  const [colData, setColData] = useState([]);
-  const [columns, setColumns] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
-  const [sortOrder, setSortOrder] = useState(-1);
-  const [selectedFilters, setSelectedFilters] = useState({});
-  const [searchValue, setSearchValue] = useState("");
+    const [data, setData] = useState([]);
+    const [isDataFetched, setIsDataFetched] = useState(false);
+    const [colData, setColData] = useState([]);
+    const [columns, setColumns] = useState([]);
+    const [filteredData, setFilteredData] = useState([]);
+    const [sortOrder, setSortOrder] = useState(-1);
+    const [selectedFilters, setSelectedFilters] = useState({});
+    const [searchValue, setSearchValue] = useState("");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("/api/post");
-        console.log(response.data);
-        setData(response.data.data);
-        setIsDataFetched(true);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get("/api/post");
+                console.log(response.data);
+                setData(response.data.data);
+                setIsDataFetched(true);
+            } catch (error) {
+                console.log(error);
+            }
+        };
 
-    console.log("test");
-    fetchData();
-  }, []);
+        console.log("test");
+        fetchData();
+    }, []);
 
-  useEffect(() => {
-    if (data.length > 0 && !isDataFetched) {
-      setIsDataFetched(true);
-    }
-  }, [data, isDataFetched]);
+    useEffect(() => {
+        if (data.length > 0 && !isDataFetched) {
+            setIsDataFetched(true);
+        }
+    }, [data, isDataFetched]);
 
-  useEffect(() => {
-    const allColumns = data && data.length > 0 ? Object.keys(data[0]).map((column) => ({
-      name: column,
-      visible: true,
-    })) : [];
-    setColumns(allColumns);
-    setFilteredData(data);
-  }, [data]);
+    useEffect(() => {
+        const allColumns = data && data.length > 0 ? Object.keys(data[0]).map((column) => ({
+            name: column,
+            visible: true,
+        })) : [];
+        setColumns(allColumns);
+        setFilteredData(data);
+    }, [data]);
 
-  useEffect(() => {
-    if (colData.length <= 0 && columns.length > 0) {
-      let tempColData = [];
-      columns.forEach((column) => {
-        tempColData.push({
-          name: column.name,
-          selected: true,
-        });
-      });
-      setColData(tempColData);
-    }
-  }, [colData, columns]);
+    useEffect(() => {
+        if (colData.length <= 0 && columns.length > 0) {
+            let tempColData = [];
+            columns.forEach((column) => {
+                tempColData.push({
+                    name: column.name,
+                    selected: true,
+                });
+            });
+            setColData(tempColData);
+        }
+    }, [colData, columns]);
     const handleSort = (column) => {
         let sortedData = null;
         if (sortOrder === -1) {
@@ -114,26 +114,28 @@ export default function BhavyaTable() {
             });
         });
 
-       // const searchInput = document.getElementById("search-input");
+        if (typeof window !== 'undefined') {
+            const searchInput = document.getElementById("search-input");
 
-        if (searchInput.value === "") {
-            setFilteredData(filteredData);
-        } else {
-            const searchFilteredData = filteredData.filter((item) => {
-                return columns
-                    .filter((column) => column.visible)
-                    .some((column) => {
-                        const columnValue = item[column.name];
-                        return (
-                            columnValue &&
-                            columnValue
-                                .toString()
-                                .toLowerCase()
-                                .includes(searchInput.value.toString().toLowerCase())
-                        );
-                    });
-            });
-            setFilteredData(searchFilteredData);
+            if (searchInput.value === "") {
+                setFilteredData(filteredData);
+            } else {
+                const searchFilteredData = filteredData.filter((item) => {
+                    return columns
+                        .filter((column) => column.visible)
+                        .some((column) => {
+                            const columnValue = item[column.name];
+                            return (
+                                columnValue &&
+                                columnValue
+                                    .toString()
+                                    .toLowerCase()
+                                    .includes(searchInput.value.toString().toLowerCase())
+                            );
+                        });
+                });
+                setFilteredData(searchFilteredData);
+            }
         }
     };
 
