@@ -6,7 +6,7 @@ export async function POST(request, response) {
     try {
         await client.connect();
         const database = client.db('avsar');
-        const table = database.collection("users");
+        const table = database.collection("participates");
         const jsonData = await request.json();
         await table.insertOne(jsonData);
         return NextResponse.json({ message: "Data inserted successfully." });
@@ -20,7 +20,7 @@ export async function GET(request, response) {
     try {
         await client.connect();
         const database = client.db('avsar');
-        const table = database.collection("users");
+        const table = database.collection("participates");
         const data = await table.find({}).toArray();
         return NextResponse.json({ ok: true, data });
     } finally {

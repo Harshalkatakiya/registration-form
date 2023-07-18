@@ -1,266 +1,285 @@
 'use client';
-import React, { useState } from "react";
-import InputRow from "./InputRow";
-import axios from 'axios';
+import axios from "axios";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { CSVLink } from "react-csv";
+import PropTypes from 'prop-types';
 
 const page = () => {
-  const [formData, setFormData] = useState({
-    full_name1: "",
-    email1: "",
-    phone_number1: "",
-    level1: "",
-    department1: "",
-    semester1: "",
-    enrollment1: "",
-    institute: "",
-    eventtype: "",
-    groupEvent: "",
-  });
-  const [typeofevent, setTypeOfEvent] = useState("solo");
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post('api/post', formData);
-      if (response.status === 200) {
-        alert(`Thank you for submitting the form!`);
-        setRegistrationSuccess(true);
-        setSuccessMessage(response.data.text)
-        handleReset();
+  const [data, setData] = useState([]);
+  const [isDataFetched, setIsDataFetched] = useState(false);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('/api/post');
+        setData(response.data.data);
+        console.log(data)
+        setIsDataFetched(true);
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  const handleReset = () => {
-    setFormData({
-      full_name1: "",
-      email1: "",
-      phone_number1: "",
-      level1: "",
-      department1: "",
-      semester1: "",
-      enrollment1: "",
-      institute: "",
-      eventtype: "",
-      groupEvent: "",
-    });
-  };
+    };
+    fetchData();
+  }, []);
+  const csvData = data.map(item => ({
+    "Full Name 1": item.full_name1,
+    "Email 1": item.email1,
+    "Phone Number 1": item.phone_number1,
+    "Level 1": item.level1,
+    "Department 1": item.department1,
+    "Semester 1": item.semester1,
+    "Enrollment 1 ": item.enrollment1,
+    "Institute": item.institute,
+    "Event Type": item.eventtype,
+    "Group Event": item.groupEvent,
+    "Full Name 2": item.full_name2,
+    "Full Name 3": item.full_name3,
+    "Full Name 4": item.full_name4,
+    "Full Name 5": item.full_name5,
+    "Full Name 6": item.full_name6,
+    "Phone Number 2": item.phone_number2,
+    "Phone Number 3": item.phone_number3,
+    "Phone Number 4": item.phone_number4,
+    "Phone Number 5": item.phone_number5,
+    "Phone Number 6": item.phone_number6,
+    "Email 2": item.email2,
+    "Email 3": item.email3,
+    "Email 4": item.email4,
+    "Email 5": item.email5,
+    "Email 6": item.email6,
+    "Level 2": item.level2,
+    "Level 3": item.level3,
+    "Level 4": item.level4,
+    "Level 5": item.level5,
+    "Level 6": item.level6,
+    "Department 2": item.department2,
+    "Department 3": item.department3,
+    "Department 4": item.department4,
+    "Department 5": item.department5,
+    "Department 6": item.department6,
+    "Semester 2": item.semester2,
+    "Semester 3": item.semester3,
+    "Semester 4": item.semester4,
+    "Semester 5": item.semester5,
+    "Semester 6": item.semester6,
+    "Enrollment 2": item.enrollment2,
+    "Enrollment 3": item.enrollment3,
+    "Enrollment 4": item.enrollment4,
+    "Enrollment 5": item.enrollment5,
+    "Enrollment 6": item.enrollment6,
+
+  }));
+  const [user, setUser] = useState({
+    email: "", password: ""
+  });
+  const [loggedIn, setLoggedIn] = useState(false);
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name == "eventtype" && value == "solo") {
-      setTypeOfEvent("solo")
+    setUser({ ...user, [name]: value })
+  }
+  const submitUser = (e) => {
+    e.preventDefault();
+    if (user.email === '' && user.password === '') {
+      // if (user.email === 'imbuesoft@gmail.com' && user.password === 'PGAdmin@') {
+      setLoggedIn(true);
+    } else {
+      alert('Invalid email or password. Please try again.');
     }
-    if (name == "eventtype" && value == "group") {
-      setTypeOfEvent("group")
-    }
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-  const renderInputRows = () => {
-    const { groupEvent } = formData;
-    if (!groupEvent) {
-      return null;
-    }
-    const participantCount = parseInt(groupEvent.split(" ").pop());
-    //console.log(participantCount)
-    const inputRows = [];
-    // for (let i = 1; i <= participantCount; i++) {
-    //   inputRows.push(
-    //     <InputRow
-    //       key={i}
-    //       formData={formData}
-    //       participantIndex={i}
-    //       handleChange={handleChange}
-    //     />
-    //   );
-    // }
-    let i = 1
-    do {
-      inputRows.push(
-        <InputRow
-          key={i}
-          formData={formData}
-          participantIndex={i}
-          handleChange={handleChange}
-        />
-      );
-      i++
-    } while (i <= participantCount)
-    return inputRows;
-  };
-
-  const [isChecked, setIsChecked] = useState(false);
-  const [registrationSuccess, setRegistrationSuccess] = useState(false);
-  const [successmessage, setSuccessMessage] = useState("")
-
-  const handleRadioButtonChange = (event) => {
-    setIsChecked(event.target.checked);
-  };
-
+  }
   return (
-    <>
-      <div>
-        <div className="min-h-screen p-6 bg-gray-100 flex items-center justify-center">
-          <div className="container mx-auto min-h-[1000px]">
-            <div>
-              <div className="bg-white text-black  shadow-lg p-4 px-4 md:p-8 mb-2">
-                <div className="text-4xl font-bold">
-                  Atmiya Avsar Group Event Registration
-                </div>
-                <div className="text-md font-medium mt-3">
-                  Atmiya Avsar Art & Cultural Fest Event Registration
-                </div>
-                <hr />
-              </div>
-              {!registrationSuccess ? (<div className="bg-white text-black  shadow-lg p-3 px-3 md:p-6 mb-6">
-                Read / Download Event Rules -
-                <a href="/AtmiyaAvsarRulesEnglish.pdf" style={{ color: "blue" }}> English</a> |
-                <a href="/AtmiyaAvsarRulesGujarati.pdf" style={{ color: "blue" }}> Gujarati</a>
-                <div className="text-sm mb-4 mt-2">
-                  <input
-                    id="default-radio-1"
-                    type="radio"
-                    name="concent"
-                    value="yes"
-                    className="w-10"
-                    checked={isChecked}
-                    onChange={handleRadioButtonChange}
-                  />{" "}
-                  <label htmlFor="default-radio-1" className="text-lg font-normal">
-                    I have read the above rules and regulation of the events and I agree to the terms above
-                  </label>
-                </div>
-                <hr />
-                {isChecked ?
-                  (<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2 mt-2">
-                    <div>
-                      <select
-                        className="h-10 border mt-1  px-4 w-full bg-white text-black"
-                        name="institute"
-                        value={formData.institute}
-                        onChange={handleChange}
-                      >
-                        <optgroup label="Select Your Institute">
-                          <option value="">Select Your Institute</option>
-                          <option value="Atmiya University">
-                            Atmiya University
-                          </option>
-                          <option value="Shree M. & N. Virani Science College">
-                            Shree M. & N. Virani Science College
-                          </option>
-                        </optgroup>
-                      </select>
-                    </div>
-                    <div>
-                      <select
-                        className="h-10 border mt-1  px-4 w-full bg-white text-black"
-                        name="eventtype"
-                        value={formData.eventtype}
-                        onChange={handleChange}
-                      >
-                        <optgroup label="Select Event Types">
-                          <option value="">Select Event Types</option>
-                          <option value="solo">Solo Events</option>
-                          <option value="group">Group Events</option>
-                        </optgroup>
-                      </select>
-                    </div>
-                    <div>
-                      <select
-                        className="h-10 border mt-1  px-4 w-full bg-white text-black"
-                        name="groupEvent"
-                        value={formData.groupEvent}
-                        onChange={handleChange}
-                      >
-                        {
-                          typeofevent == "solo" ? (<optgroup label="Select Group Event you want to participate">
-                            <option value="">Select Solo Event</option>
-                            <option value="Debet">Debet</option>
-                            <option value="Elocution">Elocution</option>
-                            <option value="Gazal-Shayari Kaavya writing">Gazal-Shayari Kaavya writing</option>
-                            <option value="Pad-purti">Pad-purti</option>
-                            <option value="Quiz">Quiz</option>
-                            <option value="Rangoli">Rangoli</option>
-                            <option value="Painting">Painting</option>
-                            <option value="Poster-making">Poster-making</option>
-                            <option value="Collage">Collage</option>
-                            <option value="Cartooning">Cartooning</option>
-                            <option value="Mehndi">Mehndi</option>
-                            <option value="Clay Modeling">Clay Modeling</option>
-                            <option value="Sarjanatmak Karigiri">Sarjanatmak Karigiri</option>
-                            <option value="Hastakala Hobby">Hastakala Hobby</option>
-                            <option value="Spot Photography">Spot Photography</option>
-                            <option value="Shastriya Kanthya Sangeet (Hindustani / Karnatak)">Shastriya Kanthya Sangeet (Hindustani / Karnatak)</option>
-                            <option value="Shastriya Vadhya Sangeet (Swar Vadya)">Shastriya Vadhya Sangeet (Swar Vadya)</option>
-                            <option value="Shastriya Vadhya Sangeet (Tal Vadya)">Shastriya Vadhya Sangeet (Tal Vadya)</option>
-                            <option value="Halvu Kanthya Sangeet">Halvu Kanthya Sangeet</option>
-                            <option value="Lokgeet">Lokgeet</option>
-                            <option value="Bhajan">Bhajan/Prayer</option>
-                            <option value="Duha Chhand">Duha Chhand</option>
-                            <option value="Western Vocal Solo">Western Vocal Solo</option>
-                            <option value="Mono Acting">Mono Acting</option>
-                            <option value="Mimicry">Mimicry</option>
-                            <option value="Classical Dance">Classical Dance</option>
-                            <option value="Story - Telling">Story - Telling</option>
-                          </optgroup>) : (<optgroup label="Select Group Event you want to participate">
-                            <option value="">Select Group Event</option>
-                            <option value="Samuh Geet --Minimum 3 - Max Participant 6">
-                              Samuh Geet --Minimum 3 - Max Participant 6
-                            </option>
-                            <option value="Western Vocal Group-- Minimum 3 - Max Participant 6">
-                              Western Vocal Group-- Minimum 3 - Max Participant 6
-                            </option>
-                            <option value="Mime -- Minimum 3 -Max Participant 6">
-                              Mime -- Minimum 3 -Max Participant 6
-                            </option>
-                            <option value="Skit -- Minimum 3 -Max Participant 6">
-                              Skit -- Minimum 3 -Max Participant 6
-                            </option>
-                            <option value="Folk Dance -- Minimum 8-Max Participant 12">
-                              Folk Dance -- Minimum 8-Max Participant 12
-                            </option>
-                            <option value="Pracheen Raas-- Minimum 8-Max Participant 12">
-                              Pracheen Raas-- Minimum 8-Max Participant 12
-                            </option>
-                            <option value="Installation -- Max Participant 4">
-                              Installation -- Max Participant 4
-                            </option>
-                          </optgroup>)
-                        }
-                      </select>
-                    </div>
-                  </div>) : (<></>)}
-                <hr className="mt-3 mb-3" />
-                {renderInputRows()}
-                <hr className="mt-3" />
-                {/* Add more students here */}
-                {isChecked ?
-                  (<div className="text-right mt-5">
-                    <button
-                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4  mr-2"
-                      onClick={handleSubmit}
-                    >
-                      Submit
-                    </button>
-                    <button
-                      className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 "
-                      onClick={handleReset}
-                    >
-                      Reset
-                    </button>
-                  </div>) : (<></>)}
-              </div>) : (
-                <div dangerouslySetInnerHTML={{ __html: successmessage }} className="bg-white text-black  shadow-lg p-3 px-3 md:p-6 mb-6 text-red-600 font-bold mb-2">
-                </div>
-              )}
-            </div>
-          </div>
+    <> {loggedIn ? <div className="container p-1">
+      {isDataFetched ? (<>
+        <CSVLink data={csvData} filename="data.csv">
+          <button className="px-4 py-2 bg-blue-500 text-white rounded">Export CSV</button>
+        </CSVLink>
+        <table className="w-full bg-white border-2 border-gray-500">
+          <thead>
+            <tr>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Full Name 1</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Email 1</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Phone Number 1</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Level 1</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Department 1</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Semester 1</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Enrollment 1</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Institute</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Event Type</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Group Event</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Full Name 2</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Full Name 3</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Full Name 4</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Full Name 5</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Full Name 6</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Phone Number 2</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Phone Number 3</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Phone Number 4</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Phone Number 5</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Phone Number 6</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Email 2</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Email 3</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Email 4</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Email 5</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Email 6</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Level 2</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Level 3</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Level 4</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Level 5</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Level 6</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Department 2</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Department 3</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Department 4</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Department 5</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Department 6</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Semester 2</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Semester 3</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Semester 4</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Semester 5</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Semester 6</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Enrollment 2</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Enrollment 3</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Enrollment 4</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Enrollment 5</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Enrollment 6</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((item, index) => (
+              <tr key={index}>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.full_name1}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.email1}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.phone_number1}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.level1}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.department1}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.semester1}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.enrollment1}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.institute}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.eventtype}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.groupEvent}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.full_name2}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.full_name3}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.full_name4}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.full_name5}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.full_name6}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.phone_number2}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.phone_number3}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.phone_number4}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.phone_number5}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.phone_number6}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.email2}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.email3}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.email4}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.email5}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.email6}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.level2}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.level3}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.level4}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.level5}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.level6}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.department2}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.department3}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.department4}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.department5}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.department6}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.semester2}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.semester3}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.semester4}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.semester5}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.semester6}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.enrollment2}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.enrollment3}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.enrollment4}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.enrollment5}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.enrollment6}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </>) : (
+        <p>Loading data...</p>
+      )}
+    </div> : <>
+
+      <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+          <h2 className="mt-8 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+            Login to your Account
+          </h2>
         </div>
-      </div>
+        <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-sm">
+          <form className="space-y-6" method="POST">
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
+                Email address
+              </label>
+              <div className="mt-2">
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="false"
+                  required
+                  value={user.email}
+                  onChange={handleChange}
+                  className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+            <div>
+              <div className="flex items-center justify-between">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                >
+                  Password
+                </label>
+                <div className="text-sm">
+                  <Link
+                    href="/admin"
+                    className="font-semibold text-indigo-600 hover:text-indigo-500"
+                  >
+                    Forgot password?
+                  </Link>
+                </div>
+              </div>
+              <div className="mt-2">
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  autoComplete="false"
+                  required
+                  value={user.password}
+                  onChange={handleChange}
+                  className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+            <div>
+              <button
+                type="button"
+                onClick={submitUser}
+                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >
+                Sign in
+              </button>
+            </div>
+          </form>
+          <p className="mt-10 text-center text-sm text-gray-500">
+            Not a member?
+            <Link
+              href="/"
+              className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+            >
+              Go to HomePage
+            </Link>
+          </p>
+        </div>
+      </div></>}
     </>
-  );
-};
+  )
+}
 
 export default page;
