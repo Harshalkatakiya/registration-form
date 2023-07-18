@@ -79,8 +79,8 @@ const page = () => {
   }
   const submitUser = (e) => {
     e.preventDefault();
-    if (user.email === '' && user.password === '') {
-      // if (user.email === 'imbuesoft@gmail.com' && user.password === 'PGAdmin@') {
+    //if (user.email === '' && user.password === '') {
+       if (user.email === 'imbuesoft@gmail.com' && user.password === 'PGAdmin@') {
       setLoggedIn(true);
     } else {
       alert('Invalid email or password. Please try again.');
