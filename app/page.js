@@ -79,8 +79,7 @@ const page = () => {
   }
   const submitUser = (e) => {
     e.preventDefault();
-    //if (user.email === '' && user.password === '') {
-       if (user.email === 'imbuesoft@gmail.com' && user.password === 'PGAdmin@') {
+    if (user.email === 'imbuesoft@gmail.com' && user.password === 'PGAdmin@') {
       setLoggedIn(true);
     } else {
       alert('Invalid email or password. Please try again.');
@@ -89,10 +88,10 @@ const page = () => {
   return (
     <> {loggedIn ? <div className="container p-1">
       {isDataFetched ? (<>
-        <CSVLink data={csvData} filename="data.csv">
-          <button className="px-4 py-2 bg-blue-500 text-white rounded">Export CSV</button>
+        <CSVLink data={csvData} filename="data.csv" className="flex mt-1">
+          <button className="px-4 py-2 bg-blue-500 text-white rounded m-auto">Export CSV</button>
         </CSVLink>
-        <table className="w-full bg-white border-2 border-gray-500">
+        <table className="w-full bg-white border-2 border-gray-500 mt-4">
           <thead>
             <tr>
               <th className="px-4 py-2 border-2 border-gray-500 font-bold">Full Name 1</th>
