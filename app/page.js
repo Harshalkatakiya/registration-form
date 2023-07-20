@@ -253,7 +253,7 @@ const page = () => {
                 </label>
                 <div className="text-sm">
                   <Link
-                    href="/admin"
+                    href="/"
                     className="font-semibold text-indigo-600 hover:text-indigo-500"
                   >
                     Forgot password?
