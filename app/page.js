@@ -13,7 +13,6 @@ const page = () => {
       try {
         const response = await axios.get('/api/post');
         setData(response.data.data);
-        console.log(data)
         setIsDataFetched(true);
       } catch (error) {
         console.log(error);
@@ -22,6 +21,7 @@ const page = () => {
     fetchData();
   }, []);
   const csvData = data.map(item => ({
+    "Registration ID": item.registrationID,
     "Full Name 1": item.full_name1,
     "Email 1": item.email1,
     "Phone Number 1": item.phone_number1,
@@ -29,9 +29,14 @@ const page = () => {
     "Department 1": item.department1,
     "Semester 1": item.semester1,
     "Enrollment 1 ": item.enrollment1,
-    "Institute": item.institute,
     "Event Type": item.eventtype,
     "Group Event": item.groupEvent,
+    "Institute 1": item.institute1,
+    "Institute 2": item.institute2,
+    "Institute 3": item.institute3,
+    "Institute 4": item.institute4,
+    "Institute 5": item.institute5,
+    "Institute 6": item.institute6,
     "Full Name 2": item.full_name2,
     "Full Name 3": item.full_name3,
     "Full Name 4": item.full_name4,
@@ -94,6 +99,7 @@ const page = () => {
         <table className="w-full bg-white border-2 border-gray-500 mt-4">
           <thead>
             <tr>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Registration ID</th>
               <th className="px-4 py-2 border-2 border-gray-500 font-bold">Full Name 1</th>
               <th className="px-4 py-2 border-2 border-gray-500 font-bold">Email 1</th>
               <th className="px-4 py-2 border-2 border-gray-500 font-bold">Phone Number 1</th>
@@ -101,9 +107,14 @@ const page = () => {
               <th className="px-4 py-2 border-2 border-gray-500 font-bold">Department 1</th>
               <th className="px-4 py-2 border-2 border-gray-500 font-bold">Semester 1</th>
               <th className="px-4 py-2 border-2 border-gray-500 font-bold">Enrollment 1</th>
-              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Institute</th>
               <th className="px-4 py-2 border-2 border-gray-500 font-bold">Event Type</th>
               <th className="px-4 py-2 border-2 border-gray-500 font-bold">Group Event</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Institute 1</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Institute 2</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Institute 3</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Institute 4</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Institute 5</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Institute 6</th>
               <th className="px-4 py-2 border-2 border-gray-500 font-bold">Full Name 2</th>
               <th className="px-4 py-2 border-2 border-gray-500 font-bold">Full Name 3</th>
               <th className="px-4 py-2 border-2 border-gray-500 font-bold">Full Name 4</th>
@@ -144,6 +155,7 @@ const page = () => {
           <tbody>
             {data.map((item, index) => (
               <tr key={index}>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.registrationID}</td>
                 <td className="px-4 py-2 border-2 border-gray-500">{item.full_name1}</td>
                 <td className="px-4 py-2 border-2 border-gray-500">{item.email1}</td>
                 <td className="px-4 py-2 border-2 border-gray-500">{item.phone_number1}</td>
@@ -151,9 +163,14 @@ const page = () => {
                 <td className="px-4 py-2 border-2 border-gray-500">{item.department1}</td>
                 <td className="px-4 py-2 border-2 border-gray-500">{item.semester1}</td>
                 <td className="px-4 py-2 border-2 border-gray-500">{item.enrollment1}</td>
-                <td className="px-4 py-2 border-2 border-gray-500">{item.institute}</td>
                 <td className="px-4 py-2 border-2 border-gray-500">{item.eventtype}</td>
                 <td className="px-4 py-2 border-2 border-gray-500">{item.groupEvent}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.institute1}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.institute2}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.institute3}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.institute4}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.institute5}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.institute6}</td>
                 <td className="px-4 py-2 border-2 border-gray-500">{item.full_name2}</td>
                 <td className="px-4 py-2 border-2 border-gray-500">{item.full_name3}</td>
                 <td className="px-4 py-2 border-2 border-gray-500">{item.full_name4}</td>
