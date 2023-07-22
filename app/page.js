@@ -13,6 +13,7 @@ const page = () => {
       try {
         const response = await axios.get('/api/post');
         setData(response.data.data);
+        //console.log(response.data.data)
         setIsDataFetched(true);
       } catch (error) {
         console.log(error);
@@ -30,6 +31,7 @@ const page = () => {
     "Semester 1": item.semester1,
     "Enrollment 1 ": item.enrollment1,
     "Event Type": item.eventtype,
+    "Event Name": item.eventName,
     "Group Event": item.groupEvent,
     "Institute 1": item.institute1,
     "Institute 2": item.institute2,
@@ -108,6 +110,7 @@ const page = () => {
               <th className="px-4 py-2 border-2 border-gray-500 font-bold">Semester 1</th>
               <th className="px-4 py-2 border-2 border-gray-500 font-bold">Enrollment 1</th>
               <th className="px-4 py-2 border-2 border-gray-500 font-bold">Event Type</th>
+              <th className="px-4 py-2 border-2 border-gray-500 font-bold">Event Name</th>
               <th className="px-4 py-2 border-2 border-gray-500 font-bold">Group Event</th>
               <th className="px-4 py-2 border-2 border-gray-500 font-bold">Institute 1</th>
               <th className="px-4 py-2 border-2 border-gray-500 font-bold">Institute 2</th>
@@ -164,6 +167,7 @@ const page = () => {
                 <td className="px-4 py-2 border-2 border-gray-500">{item.semester1}</td>
                 <td className="px-4 py-2 border-2 border-gray-500">{item.enrollment1}</td>
                 <td className="px-4 py-2 border-2 border-gray-500">{item.eventtype}</td>
+                <td className="px-4 py-2 border-2 border-gray-500">{item.eventName}</td>
                 <td className="px-4 py-2 border-2 border-gray-500">{item.groupEvent}</td>
                 <td className="px-4 py-2 border-2 border-gray-500">{item.institute1}</td>
                 <td className="px-4 py-2 border-2 border-gray-500">{item.institute2}</td>
