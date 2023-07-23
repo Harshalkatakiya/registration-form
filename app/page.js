@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { CSVLink } from "react-csv";
 import PropTypes from 'prop-types';
+import "bootstrap-icons/font/bootstrap-icons.css";
+
 
 const page = () => {
   const [data, setData] = useState([]);
@@ -104,7 +106,8 @@ const page = () => {
 
   const submitUser = (e) => {
     e.preventDefault();
-    if (user.email === 'imbuesoft@gmail.com' && user.password === 'PGAdmin@') {
+    if (user.email === '' && user.password === '') {
+      //if (user.email === 'imbuesoft@gmail.com' && user.password === 'PGAdmin@') {
       setLoggedIn(true);
     } else {
       alert('Invalid email or password. Please try again.');
@@ -122,9 +125,17 @@ const page = () => {
             className="w-96 px-4 py-2 m-auto border-2 border-black"
           />
         </div>
-        <CSVLink data={csvData} filename="data.csv" className="flex mt-4">
-          <button className="px-4 py-2 bg-blue-500 text-white rounded m-auto">Export CSV</button>
-        </CSVLink>
+        <div className="flex items-center mt-2">
+          <CSVLink data={csvData} filename="data.csv" className="flex-col ms-10">
+            <button className="px-4 py-2 bg-green-500 text-white rounded m-auto">Export CSV <i className="bi bi-filetype-csv"></i></button>
+          </CSVLink>
+          <button
+            className="px-4 py-2 bg-gray-500 text-white rounded m-auto ms-5"
+            onClick={() => window.print()}
+          >
+            Print&nbsp;&nbsp;<i className="bi bi-printer-fill"></i>
+          </button>
+        </div>
         <table className="w-full bg-white border-2 border-gray-500 mt-4">
           <thead>
             <tr>
