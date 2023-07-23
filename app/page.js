@@ -8,6 +8,8 @@ import PropTypes from 'prop-types';
 const page = () => {
   const [data, setData] = useState([]);
   const [isDataFetched, setIsDataFetched] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -84,6 +86,22 @@ const page = () => {
     const { name, value } = e.target;
     setUser({ ...user, [name]: value })
   }
+
+  useEffect(() => {
+    // Filter data based on search query
+    const filtered = data.filter((item) =>
+      Object.values(item).some((value) =>
+        value.toString().toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    );
+    setFilteredData(filtered);
+  }, [data, searchQuery]);
+
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+
   const submitUser = (e) => {
     e.preventDefault();
     if (user.email === 'imbuesoft@gmail.com' && user.password === 'PGAdmin@') {
@@ -95,7 +113,16 @@ const page = () => {
   return (
     <> {loggedIn ? <div className="container p-1">
       {isDataFetched ? (<>
-        <CSVLink data={csvData} filename="data.csv" className="flex mt-1">
+        <div className="flex items-center">
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={handleSearch}
+            placeholder="Search anything..."
+            className="w-96 px-4 py-2 m-auto border-2 border-black"
+          />
+        </div>
+        <CSVLink data={csvData} filename="data.csv" className="flex mt-4">
           <button className="px-4 py-2 bg-blue-500 text-white rounded m-auto">Export CSV</button>
         </CSVLink>
         <table className="w-full bg-white border-2 border-gray-500 mt-4">
@@ -156,7 +183,7 @@ const page = () => {
             </tr>
           </thead>
           <tbody>
-            {data.map((item, index) => (
+            {filteredData.map((item, index) => (
               <tr key={index}>
                 <td className="px-4 py-2 border-2 border-gray-500">{item.registrationID}</td>
                 <td className="px-4 py-2 border-2 border-gray-500">{item.full_name1}</td>
