@@ -4,10 +4,11 @@ import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 import CheckboxDropdown from "./CheckboxDropdown";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import "bootstrap/dist/css/bootstrap.css";
-import "bootstrap/dist/js/bootstrap.bundle.js";
+import Head from "next/head";
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 export default function BhavyaTable(props) {
+
   const data = props.data;
   const maxLengthObject = data.reduce((maxObj, currentObj) => {
     const maxObjLength = Object.keys(maxObj).length;
@@ -172,155 +173,160 @@ export default function BhavyaTable(props) {
   };
 
   return (
-    <div>
-      <div className="container d-grid">
-        <div className="d-flex justify-content-between">
-          <div className="d-flex justify-content-start my-3">
-            <CheckboxDropdown
-              colData={colData}
-              handleColumnToggle={handleColumnToggle}></CheckboxDropdown>
-          </div>
-          <div className="my-3 d-table-cell justify-content-center">
-            <div className="input-group">
-              <span className="input-group-text" id="basic-addon1">
-                <i className="bi bi-search"></i>
-              </span>
-              <input
-                id="search-input"
-                type="text"
-                value={searchValue}
-                onChange={(event) => {
-                  setSearchValue(event.target.value);
-                  handleSearch();
-                }}
-                className="form-control"
-                placeholder="Search..."
-              />
-              {/* <button className="btn btn-secondary" type="button" id="button-addon2">
+    <>
+      <Head>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous"></link>
+      </Head>
+      <div>
+        <div className="container d-grid">
+          <div className="d-flex justify-content-between">
+            <div className="d-flex justify-content-start my-3">
+              <CheckboxDropdown
+                colData={colData}
+                handleColumnToggle={handleColumnToggle}></CheckboxDropdown>
+            </div>
+            <div className="my-3 d-table-cell justify-content-center">
+              <div className="input-group">
+                <span className="input-group-text" id="basic-addon1">
+                  <i className="bi bi-search"></i>
+                </span>
+                <input
+                  id="search-input"
+                  type="text"
+                  value={searchValue}
+                  onChange={(event) => {
+                    setSearchValue(event.target.value);
+                    handleSearch();
+                  }}
+                  className="form-control"
+                  placeholder="Search..."
+                />
+                {/* <button className="btn btn-secondary" type="button" id="button-addon2">
                 Search
               </button> */}
+              </div>
+            </div>
+            <div className="d-flex justify-content-end my-3">
+              <button className="btn btn-danger mx-1" onClick={handleExportPDF}>
+                Export PDF&nbsp;&nbsp;<i className="bi bi-file-earmark-pdf-fill"></i>
+              </button>
+              <button className="btn btn-success mx-1">
+                <CSVLink
+                  className="text-light text-decoration-none"
+                  data={handleExportCSV()}
+                  filename="table.csv">
+                  Export CSV&nbsp;&nbsp;<i className="bi bi-filetype-csv"></i>
+                </CSVLink>
+              </button>
             </div>
           </div>
-          <div className="d-flex justify-content-end my-3">
-            <button className="btn btn-danger mx-1" onClick={handleExportPDF}>
-              Export PDF&nbsp;&nbsp;<i className="bi bi-file-earmark-pdf-fill"></i>
-            </button>
-            <button className="btn btn-success mx-1">
-              <CSVLink
-                className="text-light text-decoration-none"
-                data={handleExportCSV()}
-                filename="table.csv">
-                Export CSV&nbsp;&nbsp;<i className="bi bi-filetype-csv"></i>
-              </CSVLink>
-            </button>
-          </div>
         </div>
-      </div>
-      <div className="table-responsive">
-        <table className="table table-striped">
-          <thead className="table-dark">
-            <tr>
-              {columns.map((column, index) =>
-                column.visible ? (
-                  <th
-                    key={column.name}
-                    draggable
-                    onDragStart={(e) => handleDragStart(e, column.name)}
-                    onDragOver={handleDragOver}
-                    onDrop={(e) => handleDrop(e, column.name)}>
-                    <div className="row d-flex justify-content-center mt-2">
-                      <div className="col-12 text-end p-1 me-3">
-                        <div className="float-start ms-3">
-                          {column.name.charAt(0).toUpperCase() + column.name.slice(1)}
-                        </div>
-                        <button
-                          className="btn btn-link text-info text-decoration-none p-1"
-                          onClick={() => handleSort(column.name)}>
-                          <i className="bi bi-arrow-down-up"></i>
-                        </button>
-                        <button
-                          className="btn btn-sm btn-link text-warning text-decoration-none p-1"
-                          data-bs-toggle="modal"
-                          data-bs-target={`#filterModal_${column.name}`}>
-                          <i className="bi bi-funnel-fill"></i>
-                        </button>
-                      </div>
-                    </div>
-                    <div
-                      className="modal fade"
-                      id={`filterModal_${column.name}`}
-                      tabIndex="-1"
-                      aria-labelledby={`filterModalLabel_${column.name}`}
-                      aria-hidden="true">
-                      <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                        <div className="modal-content">
-                          <div className="modal-header">
-                            <h5
-                              className="modal-title text-dark"
-                              id={`filterModalLabel_${column.name}`}>
-                              {column.name.charAt(0).toUpperCase() + column.name.slice(1)} Filters
-                            </h5>
-                            <button
-                              type="button"
-                              className="btn-close"
-                              data-bs-dismiss="modal"
-                              aria-label="Close"></button>
-                          </div>
-                          <div className="modal-body fw-normal">
-                            {Array.from(new Set(data.map((item) => item[column.name]))).map(
-                              (value) => (
-                                <div className="form-check my-4" key={value}>
-                                  <input
-                                    className="form-check-input"
-                                    type="checkbox"
-                                    id={`filter_${column.name}_${value}`}
-                                    value={value}
-                                    checked={selectedFilters[column.name]?.includes(value) || false}
-                                    onChange={() => handleFilterToggle(column.name, value)}
-                                  />
-                                  <label
-                                    className="form-check-label text-dark"
-                                    htmlFor={`filter_${column.name}_${value}`}>
-                                    {value}
-                                  </label>
-                                </div>
-                              )
-                            )}
-                          </div>
-                          <div className="modal-footer">
-                            <button
-                              type="button"
-                              data-bs-dismiss="modal"
-                              className="btn btn-success"
-                              onClick={handleFilter}>
-                              Apply Filters
-                            </button>
-                            <button
-                              type="button"
-                              className="btn btn-danger"
-                              data-bs-dismiss="modal">
-                              Close
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </th>
-                ) : null
-              )}
-            </tr>
-          </thead>
-          <tbody>
-            {filteredData.map((item, index) => (
-              <tr key={index}>
+        <div className="table-responsive">
+          <table className="table table-striped">
+            <thead className="table-dark">
+              <tr>
                 {columns.map((column) =>
-                  column.visible ? <td key={column.name}>{item[column.name]}</td> : null
+                  column.visible ? (
+                    <th
+                      key={column.name}
+                      draggable
+                      onDragStart={(e) => handleDragStart(e, column.name)}
+                      onDragOver={handleDragOver}
+                      onDrop={(e) => handleDrop(e, column.name)}>
+                      <div className="row d-flex justify-content-center mt-2">
+                        <div className="col-12 text-end p-1 me-3">
+                          <div className="float-start ms-3">
+                            {column.name.charAt(0).toUpperCase() + column.name.slice(1)}
+                          </div>
+                          <button
+                            className="btn btn-link text-info text-decoration-none p-1"
+                            onClick={() => handleSort(column.name)}>
+                            <i className="bi bi-arrow-down-up"></i>
+                          </button>
+                          <button
+                            className="btn btn-sm btn-link text-warning text-decoration-none p-1"
+                            data-bs-toggle="modal"
+                            data-bs-target={`#filterModal_${column.name}`}>
+                            <i className="bi bi-funnel-fill"></i>
+                          </button>
+                        </div>
+                      </div>
+                      <div
+                        className="modal fade"
+                        id={`filterModal_${column.name}`}
+                        tabIndex="-1"
+                        aria-labelledby={`filterModalLabel_${column.name}`}
+                        aria-hidden="true">
+                        <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                          <div className="modal-content">
+                            <div className="modal-header">
+                              <h5
+                                className="modal-title text-dark"
+                                id={`filterModalLabel_${column.name}`}>
+                                {column.name.charAt(0).toUpperCase() + column.name.slice(1)} Filters
+                              </h5>
+                              <button
+                                type="button"
+                                className="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                            </div>
+                            <div className="modal-body fw-normal">
+                              {Array.from(new Set(data.map((item) => item[column.name]))).map(
+                                (value) => (
+                                  <div className="form-check my-4" key={value}>
+                                    <input
+                                      className="form-check-input"
+                                      type="checkbox"
+                                      id={`filter_${column.name}_${value}`}
+                                      value={value}
+                                      checked={selectedFilters[column.name]?.includes(value) || false}
+                                      onChange={() => handleFilterToggle(column.name, value)}
+                                    />
+                                    <label
+                                      className="form-check-label text-dark"
+                                      htmlFor={`filter_${column.name}_${value}`}>
+                                      {value}
+                                    </label>
+                                  </div>
+                                )
+                              )}
+                            </div>
+                            <div className="modal-footer">
+                              <button
+                                type="button"
+                                data-bs-dismiss="modal"
+                                className="btn btn-success"
+                                onClick={handleFilter}>
+                                Apply Filters
+                              </button>
+                              <button
+                                type="button"
+                                className="btn btn-danger"
+                                data-bs-dismiss="modal">
+                                Close
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </th>
+                  ) : null
                 )}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filteredData.map((item, index) => (
+                <tr key={index}>
+                  {columns.map((column) =>
+                    column.visible ? <td key={column.name}>{item[column.name]}</td> : null
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

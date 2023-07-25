@@ -22,7 +22,7 @@ const page = () => {
     };
     fetchData();
   }, []);
-  
+
   const [user, setUser] = useState({
     email: "", password: ""
   });
@@ -32,11 +32,11 @@ const page = () => {
     setUser({ ...user, [name]: value })
   }
 
- 
+
 
   const submitUser = (e) => {
     e.preventDefault();
-      if (user.email === 'imbuesoft@gmail.com' && user.password === 'PGAdmin@') {
+    if (user.email === 'imbuesoft@gmail.com' && user.password === 'PGAdmin@') {
       setLoggedIn(true);
     } else {
       alert('Invalid email or password. Please try again.');
