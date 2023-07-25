@@ -2,8 +2,9 @@
 import axios from "axios";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import BhavyaTable from "./BhavyaTable";
+
 import "bootstrap-icons/font/bootstrap-icons.css";
+import BhavyaTable from "./BhavyaTable";
 
 
 const page = () => {
@@ -32,7 +33,6 @@ const page = () => {
     setUser({ ...user, [name]: value })
   }
 
- 
 
   const submitUser = (e) => {
     e.preventDefault();

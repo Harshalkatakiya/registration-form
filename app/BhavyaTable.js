@@ -202,6 +202,7 @@ export default function BhavyaTable(props) {
             </div>
           </div>
           <div className="d-flex justify-content-end my-3">
+
             <button className="btn btn-danger mx-1" onClick={handleExportPDF}>
               Export PDF&nbsp;&nbsp;<i className="bi bi-file-earmark-pdf-fill"></i>
             </button>
